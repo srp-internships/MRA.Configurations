@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 
-namespace Mra.Shared.Azure.Insights;
+namespace Mra.Shared.Initializer.Azure.Insight;
 
 public static class ApplicationInsightsConfig
 {

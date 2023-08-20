@@ -2,8 +2,10 @@
 using Azure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using Mra.Shared.Azure.KeyVault;
+using Mra.Shared.Common.Constants;
 
-namespace Mra.Shared.Azure.KeyVault;
+namespace Mra.Shared.Initializer.Azure.KeyVault;
 
 
 public static class WebApplicationBuilderAzureExtension
@@ -23,9 +25,9 @@ public static class WebApplicationBuilderAzureExtension
             using var x509Store = new X509Store(StoreLocation.CurrentUser);
             x509Store.Open(OpenFlags.ReadOnly);
 
-            var thumbprint = builder.Configuration["AzureKeyVault:AzureADCertThumbprint"];
+            var thumbprint = builder.Configuration[ConfigurationKeys.AzureADCertThumbprint];
 
-            if (thumbprint == null) throw new NullReferenceException("AzureKeyVault:AzureADCertThumbprint can not be null");
+            if (thumbprint == null) throw new NullReferenceException($"{ConfigurationKeys.AzureADCertThumbprint} can not be null");
             var certificate = x509Store.Certificates
                 .Find(
                     X509FindType.FindByThumbprint,
@@ -35,10 +37,10 @@ public static class WebApplicationBuilderAzureExtension
                 .Single();
 
             builder.Configuration.AddAzureKeyVault(
-                new Uri($"https://{builder.Configuration["AzureKeyVault:KeyVaultName"]}.vault.azure.net/"),
+                new Uri($"https://{builder.Configuration[ConfigurationKeys.KeyVaultName]}.vault.azure.net/"),
                 new ClientCertificateCredential(
-                    builder.Configuration["AzureKeyVault:AzureADDirectoryId"],
-                    builder.Configuration["AzureKeyVault:AzureADApplicationId"],
+                    builder.Configuration[ConfigurationKeys.AzureADDirectoryId],
+                    builder.Configuration[ConfigurationKeys.AzureADApplicationId],
                     certificate), new PrefixKeyVaultSecretManager(projectName));
     }
 }
