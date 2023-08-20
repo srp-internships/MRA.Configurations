@@ -5,6 +5,18 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <PackageId>Mra.Shared</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>Mra-developers</Authors>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryUrl>https://github.com/srp-internships/Mra.Shared</RepositoryUrl>
+        <PackageTags>Azure key vault, Azure email service</PackageTags>
+        <Description>Azure key vault, Azure email service and constants for mra projects</Description>
+        
+        
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
