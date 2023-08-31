@@ -1,21 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     </PropertyGroup>
     
     <PropertyGroup>
         <PackageId>Mra.Shared</PackageId>
-        <Version>1.0.0</Version>
+        <Version>1.0.6</Version>
         <Authors>Mra-developers</Authors>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <RepositoryUrl>https://github.com/srp-internships/Mra.Shared</RepositoryUrl>
         <PackageTags>Azure key vault, Azure email service</PackageTags>
         <Description>Azure key vault, Azure email service and constants for mra projects</Description>
-        
-        
     </PropertyGroup>
 
     <ItemGroup>

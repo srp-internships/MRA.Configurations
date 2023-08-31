@@ -11,9 +11,9 @@ public class EmailService:IEmailService
 {
     private readonly IConfiguration _configuration;
     private readonly EmailClient _client;
-    private readonly ILogger _logger;
+    private readonly ILogger<EmailService> _logger;
 
-    public EmailService(IConfiguration configuration, ILogger logger)
+    public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
     {
         _configuration = configuration;
         var connectionString =
