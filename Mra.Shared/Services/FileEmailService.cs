@@ -18,9 +18,22 @@ public class FileEmailService : IEmailService
         SendEmailData.Receivers = receives;
         SendEmailData.Body = body;
         SendEmailData.Subject = subject;
+        
+        var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "MRAEmails");
+        
+        var path = Path.Combine(directory, "Sandbox.txt");
 
-        await using (var file = File.AppendText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                         "MRAEmails", "Sandbox.txt")))
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+        
+        if (!File.Exists(path))
+        {
+            File.Create(path).Close();
+        }
+        await using (var file = File.AppendText(path))
         {
             var jsonLine = JsonConvert.SerializeObject(new
             {
