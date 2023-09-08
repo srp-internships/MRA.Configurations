@@ -3,3 +3,7 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+/.vs/Mra.Shared/FileContentIndex
+/.gitignore
+/.vs/Mra.Shared/v17/TestStore/0
+/.gitignore
