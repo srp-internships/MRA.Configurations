@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -8,7 +8,7 @@
     
     <PropertyGroup>
         <PackageId>Mra.Shared</PackageId>
-        <Version>1.0.6</Version>
+        <Version>1.0.8</Version>
         <Authors>Mra-developers</Authors>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <RepositoryUrl>https://github.com/srp-internships/Mra.Shared</RepositoryUrl>
