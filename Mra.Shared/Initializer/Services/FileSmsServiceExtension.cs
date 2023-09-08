@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Mra.Shared.Common.Interfaces.Services;
+using Mra.Shared.Services;
 
-namespace Mra.Shared.Initializer.Services
+namespace Mra.Shared.Initializer.Services;
+public static class FileSmsServiceExtension
 {
-    internal class FileSmsServiceExtension
+    public static void AddFileSmsService(this IServiceCollection services)
     {
+        services.AddScoped<ISmsService, FileSmsService>();
     }
 }
+

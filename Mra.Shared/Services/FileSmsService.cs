@@ -43,7 +43,7 @@ public class FileSmsService : ISmsService
 
         return code;
     }
-    private static String GenerateMessage(out int code)
+    private static string GenerateMessage(out int code)
     {
         Random random = new Random();
         code = random.Next(1000, 10001);
