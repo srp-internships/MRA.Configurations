@@ -9,4 +9,8 @@ public static class ConfigurationKeys
     public const string KeyVaultName = "AzureKeyVault:KeyVaultName";
     public const string AzureADDirectoryId = "AzureKeyVault:AzureADDirectoryId";
     public const string AzureADApplicationId = "AzureKeyVault:AzureADApplicationId";
+
+    public const string OsonSmsLogin = "OsonSms:Login";
+    public const string OsonSmsPassHash = "OsonSms:PassHash";
+    public const string OsonSmsSender = "OsonSms:Sender";
 }

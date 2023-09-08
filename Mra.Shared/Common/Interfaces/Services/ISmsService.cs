@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mra.Shared.Common.Interfaces.Services
+﻿namespace Mra.Shared.Common.Interfaces.Services;
+/// <summary>
+/// Represents a service for sending SMS messages.
+/// </summary>
+public interface ISmsService
 {
-    internal interface ISmsService
-    {
-    }
+    /// <summary>
+    /// Sends an SMS message asynchronously to the specified phone number and returns a confirmation code.
+    /// </summary>
+    /// <param name="phoneNumber">The destination phone number.</param>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> representing the asynchronous operation.
+    /// The task result is an integer representing the confirmation code.
+    /// </returns>
+    Task<int> SendSmsAsync(string phoneNumber);
 }
