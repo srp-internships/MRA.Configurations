@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Mra.Shared.Common.Interfaces.Services;
+using Mra.Shared.OsonSms.SmsService;
 using Newtonsoft.Json;
 
 namespace Mra.Shared.Services;
@@ -11,9 +12,9 @@ public static class SendSmsData
 
 public class FileSmsService : ISmsService
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<SmsService> _logger;
 
-    public FileSmsService(ILogger logger)
+    public FileSmsService(ILogger<SmsService> logger)
     {
         _logger = logger;
     }
