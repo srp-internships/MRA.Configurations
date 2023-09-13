@@ -15,9 +15,8 @@ public class SmsService : ISmsService
         _client = client;
         _logger = logger;
     }
-    public async Task<int> SendSmsAsync(string phoneNumber)
+    public async Task<bool> SendSmsAsync(string phoneNumber, string text)
     {
-        int code;
         var config = new Dictionary<string, string>();
         config["dlm"] = ";"; // do not change!!! 
         config["t"] = "23"; // do not change!!!
@@ -30,17 +29,19 @@ public class SmsService : ISmsService
 
         var str_hash = Sha256Hash(txn_id + config["dlm"] + config["login"] + config["dlm"] + config["sender"] + config["dlm"] + phoneNumber + config["dlm"] + config["pass_hash"]);
 
-        string url = $"https://api.osonsms.com/sendsms_v1.php?login={config["login"]}&from={config["sender"]}&phone_number={phoneNumber}&msg={GenerateMessage(out code)}&txn_id={txn_id}&str_hash={str_hash}";
+        string url = $"https://api.osonsms.com/sendsms_v1.php?login={config["login"]}&from={config["sender"]}&phone_number={phoneNumber}&msg={text}&txn_id={txn_id}&str_hash={str_hash}";
 
         try
         {
-            await _client.GetAsync(url);
-            return code;
+            var response = await _client.GetAsync(url);
+            if (response.IsSuccessStatusCode) 
+                return true;
+            return false;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error on sending sms");
-            return -1;
+            return false;
         }
     }
 
@@ -56,14 +57,6 @@ public class SmsService : ISmsService
             foreach (Byte b in result)
                 Sb.Append(b.ToString("x2"));
         }
-
         return Sb.ToString();
-    }
-
-    private static string GenerateMessage(out int code)
-    {
-        Random random = new Random();
-        code = random.Next(1000, 10001);
-        return $"Your confirmation code is: {code}. Please enter this code to verify your phone number.";
     }
 }

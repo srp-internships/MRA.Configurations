@@ -12,5 +12,5 @@ public interface ISmsService
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation.
     /// The task result is an integer representing the confirmation code.
     /// </returns>
-    Task<int> SendSmsAsync(string phoneNumber);
+    Task<bool> SendSmsAsync(string phoneNumber, string text);
 }
