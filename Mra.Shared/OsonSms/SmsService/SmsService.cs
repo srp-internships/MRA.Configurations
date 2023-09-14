@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Mra.Shared.Common.Constants;
 using Mra.Shared.Common.Interfaces.Services;
 using System.Security.Cryptography;
@@ -9,11 +10,13 @@ public class SmsService : ISmsService
 {
     private readonly HttpClient _client;
     private readonly ILogger<SmsService> _logger;
+    private readonly IConfiguration _configuration;
 
-    public SmsService(HttpClient client, ILogger<SmsService> logger)
+    public SmsService(HttpClient client, ILogger<SmsService> logger, IConfiguration configuration)
     {
         _client = client;
         _logger = logger;
+        _configuration = configuration;
     }
     public async Task<bool> SendSmsAsync(string phoneNumber, string text)
     {
@@ -21,9 +24,9 @@ public class SmsService : ISmsService
         config["dlm"] = ";"; // do not change!!! 
         config["t"] = "23"; // do not change!!!
 
-        config["login"] = ConfigurationKeys.OsonSmsLogin; // Your login
-        config["pass_hash"] = ConfigurationKeys.OsonSmsPassHash; // Your hash code
-        config["sender"] = ConfigurationKeys.OsonSmsSender; // Your alphanumeric
+        config["login"] = _configuration[ConfigurationKeys.OsonSmsLogin]; // Your login
+        config["pass_hash"] = _configuration[ConfigurationKeys.OsonSmsPassHash]; // Your hash code
+        config["sender"] = _configuration[ConfigurationKeys.OsonSmsSender]; // Your alphanumeric
 
         var txn_id = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds; // Has to be unique for each request
 
