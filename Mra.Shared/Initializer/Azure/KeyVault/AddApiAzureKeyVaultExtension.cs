@@ -48,6 +48,15 @@ public static class WebApplicationBuilderAzureExtension
                            .OfType<X509Certificate2>()
                            .FirstOrDefault();
         }
+
+        if (certificate == null)
+        {
+            var path = Path.Combine(typeof(WebApplicationBuilderAzureExtension).Assembly.Location, "cert.pfx");
+
+            if (File.Exists(path))
+                certificate = new X509Certificate2(File.ReadAllBytes(path));
+        }
+
         if (certificate == null)
             throw new InvalidOperationException("Certificate not found");
         configurations.AddAzureKeyVault(
