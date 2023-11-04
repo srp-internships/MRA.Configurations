@@ -1,31 +1,40 @@
-name: Publish to NuGet
+name: Version and Publish
 
 on:
   push:
     branches:
-      - master
+      - release
 
 jobs:
-  build:
+  version_and_publish:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 7.0.x
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 7.0.x
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Install Nerdbank.GitVersioning
+        run: dotnet tool install --global dotnet-nbgv
 
-    - name: Build project
-      run: dotnet build --configuration Release
+      - name: Get and increment version
+        run: dotnet nbgv increment --output build
 
-    - name: Pack NuGet package
-      run: dotnet pack --configuration Release --output ./artifacts
+      - name: Update project file with new version
+        run: dotnet nbgv stamp
 
-    - name: Publish to NuGet
-      run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build project
+        run: dotnet build --configuration Release
+
+      - name: Pack NuGet package
+        run: dotnet pack --configuration Release --output ./artifacts
+
+      - name: Publish to NuGet
+        run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
