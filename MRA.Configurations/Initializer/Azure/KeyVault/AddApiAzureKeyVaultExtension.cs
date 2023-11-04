@@ -39,7 +39,7 @@ public static class WebApplicationBuilderAzureExtension
         if (certificate == null)
         {
             using var x509StoreLocal = new X509Store(StoreLocation.LocalMachine);
-            x509Store.Open(OpenFlags.ReadOnly);
+            x509StoreLocal.Open(OpenFlags.ReadOnly);
             certificate = x509StoreLocal.Certificates
                            .Find(
                                X509FindType.FindByThumbprint,
