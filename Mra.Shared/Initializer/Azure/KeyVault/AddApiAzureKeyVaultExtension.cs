@@ -51,7 +51,7 @@ public static class WebApplicationBuilderAzureExtension
 
         if (certificate == null)
         {
-            var path = Path.Combine(typeof(WebApplicationBuilderAzureExtension).Assembly.Location, "cert.pfx");
+            var path = Path.Combine(Directory.GetParent(typeof(WebApplicationBuilderAzureExtension).Assembly.Location).FullName, "cert.pfx");
 
             if (File.Exists(path))
                 certificate = new X509Certificate2(File.ReadAllBytes(path));

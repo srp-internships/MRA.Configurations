@@ -6,9 +6,9 @@ namespace Mra.Shared.Services;
 
 public static class SendEmailData
 {
-    public static IEnumerable<string>? Receivers { get; set; }
-    public static string? Body { get; set; }
-    public static string? Subject { get; set; }
+    public static IEnumerable<string> Receivers { get; set; }
+    public static string Body { get; set; }
+    public static string Subject { get; set; }
 }
 
 public class FileEmailService : IEmailService

@@ -7,7 +7,7 @@ namespace Mra.Shared.Services;
 
 public static class SendSmsData
 {
-    public static string? PhoneNumber { get; set; }
+    public static string PhoneNumber { get; set; }
 }
 
 public class FileSmsService : ISmsService
