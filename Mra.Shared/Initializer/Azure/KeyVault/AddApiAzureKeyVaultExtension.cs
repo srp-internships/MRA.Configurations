@@ -26,15 +26,30 @@ public static class WebApplicationBuilderAzureExtension
         var thumbprint = configurations[ConfigurationKeys.AzureADCertThumbprint];
 
         if (thumbprint == null)
-            throw new NullReferenceException($"{ConfigurationKeys.AzureADCertThumbprint} can not be null");
+            throw new ArgumentNullException($"{ConfigurationKeys.AzureADCertThumbprint} can not be null");
         var certificate = x509Store.Certificates
             .Find(
                 X509FindType.FindByThumbprint,
                 thumbprint,
                 validOnly: false)
             .OfType<X509Certificate2>()
-            .Single();
+            .FirstOrDefault();
 
+
+        if (certificate == null)
+        {
+            using var x509StoreLocal = new X509Store(StoreLocation.LocalMachine);
+            x509Store.Open(OpenFlags.ReadOnly);
+            certificate = x509StoreLocal.Certificates
+                           .Find(
+                               X509FindType.FindByThumbprint,
+                               thumbprint,
+                               validOnly: false)
+                           .OfType<X509Certificate2>()
+                           .FirstOrDefault();
+        }
+        if (certificate == null)
+            throw new InvalidOperationException("Certificate not found");
         configurations.AddAzureKeyVault(
             new Uri($"https://{configurations[ConfigurationKeys.KeyVaultName]}.vault.azure.net/"),
             new ClientCertificateCredential(
