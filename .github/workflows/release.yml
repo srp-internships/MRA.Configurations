@@ -18,15 +18,6 @@ jobs:
         with:
           dotnet-version: 7.0.x
 
-      - name: Install Nerdbank.GitVersioning
-        run: dotnet tool install --global dotnet-nbgv
-
-      - name: Get and increment version
-        run: dotnet nbgv increment --output build
-
-      - name: Update project file with new version
-        run: dotnet nbgv stamp
-
       - name: Restore dependencies
         run: dotnet restore
 
