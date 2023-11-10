@@ -39,6 +39,8 @@ public class SmsService : ISmsService
             var response = await _client.GetAsync(url);
             if (response.IsSuccessStatusCode) 
                 return true;
+
+            _logger.LogError(await response.Content.ReadAsStringAsync());
             return false;
         }
         catch (Exception ex)

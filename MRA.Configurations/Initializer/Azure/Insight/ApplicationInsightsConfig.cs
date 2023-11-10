@@ -8,7 +8,7 @@ public static class ApplicationInsightsConfig
     //todo write summary
     public static void AddApiApplicationInsights(this ILoggingBuilder logging,IConfiguration configurations)
     {
-        var connectionString = configurations["ApplicationInsights:ConnectionString"];
+        var connectionString = configurations["Logging:ApplicationInsights:ConnectionString"];
         logging.AddApplicationInsights(
             configureTelemetryConfiguration: config => config.ConnectionString = connectionString,
             configureApplicationInsightsLoggerOptions: _ => { }
