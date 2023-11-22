@@ -1,5 +1,5 @@
-﻿using Azure.Communication.Email;
-using Azure.Communication.Email.Models;
+﻿using Azure;
+using Azure.Communication.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MRA.Configurations.Common.Constants;
@@ -7,7 +7,7 @@ using MRA.Configurations.Common.Interfaces.Services;
 
 namespace MRA.Configurations.Azure.EmailService;
 
-public class EmailService:IEmailService
+public class EmailService : IEmailService
 {
     private readonly IConfiguration _configuration;
     private readonly EmailClient _client;
@@ -32,15 +32,14 @@ public class EmailService:IEmailService
         // Create the recipient list
         var emailRecipients = new EmailRecipients(receives.Select(s => new EmailAddress(s)));
 
-            // Create the EmailMessage
+        // Create the EmailMessage
         var emailMessage = new EmailMessage(
             _configuration[ConfigurationKeys.AZURE_EMAIL_SENDER],
-            emailContent,
-            emailRecipients);
+            emailRecipients, emailContent);
 
         try
         {
-            await _client.SendAsync(emailMessage);
+            await _client.SendAsync(WaitUntil.Completed, emailMessage);
             return true;
         }
         catch (Exception ex)
