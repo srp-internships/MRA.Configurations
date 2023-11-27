@@ -57,13 +57,27 @@ public static class WebApplicationBuilderAzureExtension
                 certificate = new X509Certificate2(File.ReadAllBytes(path));
         }
 
-        if (certificate == null)
-            throw new InvalidOperationException("Certificate not found");
-        configurations.AddAzureKeyVault(
-            new Uri($"https://{configurations[ConfigurationKeys.KeyVaultName]}.vault.azure.net/"),
-            new ClientCertificateCredential(
+        Uri keyVaultUri = new Uri($"https://{configurations[ConfigurationKeys.KeyVaultName]}.vault.azure.net/");
+        PrefixKeyVaultSecretManager secretManager = new PrefixKeyVaultSecretManager(projectName);
+
+        if (certificate != null)
+        {
+            configurations.AddAzureKeyVault(
+                keyVaultUri,
+                new ClientCertificateCredential(
+                    configurations[ConfigurationKeys.AzureADDirectoryId],
+                    configurations[ConfigurationKeys.AzureADApplicationId],
+                    certificate),
+                secretManager);
+        }
+        else
+        {
+            var clientSecret = new ClientSecretCredential(
                 configurations[ConfigurationKeys.AzureADDirectoryId],
                 configurations[ConfigurationKeys.AzureADApplicationId],
-                certificate), new PrefixKeyVaultSecretManager(projectName));
+                configurations[ConfigurationKeys.AZURE_CLIENT_SECRET_VALUE]);
+
+            configurations.AddAzureKeyVault(keyVaultUri, clientSecret, secretManager);
+        }
     }
 }
