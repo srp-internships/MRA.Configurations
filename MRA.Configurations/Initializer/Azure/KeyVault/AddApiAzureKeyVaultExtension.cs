@@ -20,48 +20,47 @@ public static class WebApplicationBuilderAzureExtension
     /// <param name="projectName">name of your project</param>
     public static void ConfigureAzureKeyVault(this ConfigurationManager configurations, string projectName)
     {
-        using var x509Store = new X509Store(StoreLocation.CurrentUser);
-        x509Store.Open(OpenFlags.ReadOnly);
-
-        var thumbprint = configurations[ConfigurationKeys.AzureADCertThumbprint];
-
-        if (thumbprint == null)
-            throw new ArgumentNullException($"{ConfigurationKeys.AzureADCertThumbprint} can not be null");
-        var certificate = x509Store.Certificates
-            .Find(
-                X509FindType.FindByThumbprint,
-                thumbprint,
-                validOnly: false)
-            .OfType<X509Certificate2>()
-            .FirstOrDefault();
-
-
-        if (certificate == null)
-        {
-            using var x509StoreLocal = new X509Store(StoreLocation.LocalMachine);
-            x509StoreLocal.Open(OpenFlags.ReadOnly);
-            certificate = x509StoreLocal.Certificates
-                           .Find(
-                               X509FindType.FindByThumbprint,
-                               thumbprint,
-                               validOnly: false)
-                           .OfType<X509Certificate2>()
-                           .FirstOrDefault();
-        }
-
-        if (certificate == null)
-        {
-            var path = Path.Combine(Directory.GetParent(typeof(WebApplicationBuilderAzureExtension).Assembly.Location).FullName, "cert.pfx");
-
-            if (File.Exists(path))
-                certificate = new X509Certificate2(File.ReadAllBytes(path));
-        }
-
         Uri keyVaultUri = new Uri($"https://{configurations[ConfigurationKeys.KeyVaultName]}.vault.azure.net/");
         PrefixKeyVaultSecretManager secretManager = new PrefixKeyVaultSecretManager(projectName);
 
-        if (certificate != null)
+        try
         {
+            using var x509Store = new X509Store(StoreLocation.CurrentUser);
+            x509Store.Open(OpenFlags.ReadOnly);
+
+            var thumbprint = configurations[ConfigurationKeys.AzureADCertThumbprint];
+
+            if (thumbprint == null)
+                throw new ArgumentNullException($"{ConfigurationKeys.AzureADCertThumbprint} can not be null");
+            var certificate = x509Store.Certificates
+                .Find(
+                    X509FindType.FindByThumbprint,
+                    thumbprint,
+                    validOnly: false)
+                .OfType<X509Certificate2>()
+                .FirstOrDefault();
+
+
+            if (certificate == null)
+            {
+                using var x509StoreLocal = new X509Store(StoreLocation.LocalMachine);
+                x509StoreLocal.Open(OpenFlags.ReadOnly);
+                certificate = x509StoreLocal.Certificates
+                               .Find(
+                                   X509FindType.FindByThumbprint,
+                                   thumbprint,
+                                   validOnly: false)
+                               .OfType<X509Certificate2>()
+                               .FirstOrDefault();
+            }
+
+            if (certificate == null)
+            {
+                var path = Path.Combine(Directory.GetParent(typeof(WebApplicationBuilderAzureExtension).Assembly.Location).FullName, "cert.pfx");
+
+                if (File.Exists(path))
+                    certificate = new X509Certificate2(File.ReadAllBytes(path));
+            }
             configurations.AddAzureKeyVault(
                 keyVaultUri,
                 new ClientCertificateCredential(
@@ -70,14 +69,16 @@ public static class WebApplicationBuilderAzureExtension
                     certificate),
                 secretManager);
         }
-        else
+        catch (Exception)
         {
             var clientSecret = new ClientSecretCredential(
-                configurations[ConfigurationKeys.AzureADDirectoryId],
-                configurations[ConfigurationKeys.AzureADApplicationId],
-                configurations[ConfigurationKeys.AZURE_CLIENT_SECRET_VALUE]);
+               configurations[ConfigurationKeys.AzureADDirectoryId],
+               configurations[ConfigurationKeys.AzureADApplicationId],
+               configurations[ConfigurationKeys.AZURE_CLIENT_SECRET_VALUE]);
 
             configurations.AddAzureKeyVault(keyVaultUri, clientSecret, secretManager);
         }
+
+
     }
 }
