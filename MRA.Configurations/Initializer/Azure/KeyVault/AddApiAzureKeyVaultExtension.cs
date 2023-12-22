@@ -5,19 +5,16 @@ using MRA.Configurations.Azure.KeyVault;
 using MRA.Configurations.Common.Constants;
 
 namespace MRA.Configurations.Initializer.Azure.KeyVault;
-
+/// <summary>
+/// Extension methods for configuring Azure Key Vault in web applications.
+/// </summary>
 public static class WebApplicationBuilderAzureExtension
 {
     /// <summary>
-    /// Method for configuring the Azure Key Vault.
-    /// Your configuration will had AzureKeyVault section section will had:
-    /// AzureADCertThumbprint
-    /// AzureADDirectoryId
-    /// KeyVaultName
-    /// AzureADApplicationId
+    /// Configures Azure Key Vault for the ConfigurationManager.
     /// </summary>
-    /// <param name="configurations">dont worry about it</param>
-    /// <param name="projectName">name of your project</param>
+    /// <param name="configurations">The <see cref="ConfigurationManager"/> instance.</param>
+    /// <param name="projectName">The name of the project used as a prefix for secret names.</param>
     public static void ConfigureAzureKeyVault(this ConfigurationManager configurations, string projectName)
     {
         Uri keyVaultUri = new Uri($"https://{configurations[ConfigurationKeys.KeyVaultName]}.vault.azure.net/");
