@@ -7,7 +7,7 @@
 
 	<PropertyGroup>
 		<PackageId>MRA.Configurations</PackageId>
-		<Version>2.0.3</Version>
+		<Version>2.0.4</Version>
 		<Authors>Mra-developers</Authors>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<RepositoryUrl>https://github.com/srp-internships/MRA.Configurations</RepositoryUrl>
