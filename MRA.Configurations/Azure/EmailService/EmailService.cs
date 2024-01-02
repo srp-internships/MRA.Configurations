@@ -39,7 +39,7 @@ public class EmailService : IEmailService
 
         try
         {
-            await _client.SendAsync(WaitUntil.Completed, emailMessage);
+            await _client.SendAsync(WaitUntil.Started, emailMessage);
             return true;
         }
         catch (Exception ex)
