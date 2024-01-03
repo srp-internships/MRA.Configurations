@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 using MRA.Configurations.Azure.KeyVault;
@@ -18,10 +19,11 @@ public static class WebApplicationBuilderAzureExtension
     public static void ConfigureAzureKeyVault(this ConfigurationManager configurations, string projectName)
     {
         Uri keyVaultUri = new Uri($"https://{configurations[ConfigurationKeys.KeyVaultName]}.vault.azure.net/");
-        PrefixKeyVaultSecretManager secretManager = new PrefixKeyVaultSecretManager(projectName);
-
+        PrefixKeyVaultSecretManager secretManager = new(projectName);
+        var protocol = ServicePointManager.SecurityProtocol;
         try
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.SystemDefault;
             using var x509Store = new X509Store(StoreLocation.CurrentUser);
             x509Store.Open(OpenFlags.ReadOnly);
 
@@ -75,7 +77,9 @@ public static class WebApplicationBuilderAzureExtension
 
             configurations.AddAzureKeyVault(keyVaultUri, clientSecret, secretManager);
         }
-
-
+        finally
+        {
+            ServicePointManager.SecurityProtocol = protocol;
+        }
     }
 }
