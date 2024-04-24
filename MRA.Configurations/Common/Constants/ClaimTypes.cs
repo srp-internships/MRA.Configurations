@@ -9,4 +9,5 @@ public static class ClaimTypes
     public const string Id = ClaimTypeNamespace + "/id";
     public const string Username = ClaimTypeNamespace + "/username";
     public const string Email = ClaimTypeNamespace + "/email";
+    public const string ApplicationId = ClaimTypeNamespace + "/applicationId";
 }
